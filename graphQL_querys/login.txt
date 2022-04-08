@@ -1,0 +1,12 @@
+mutation{
+  login(options: {username: "bob", password: "bob"}){
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      username
+    }
+  }
+}
