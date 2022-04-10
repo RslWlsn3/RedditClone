@@ -1,0 +1,12 @@
+mutation {
+  register(options: {username: "ben", password: "ben"}){
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      username
+    }
+  }
+}

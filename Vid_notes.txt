@@ -11,12 +11,15 @@ Add table in db via migration:
  - run migrations create cmd (yarn create:migration) - in package.json
 
 
- How to start:
+ How to start (server):
  Open wsl, run "redis-server"
  In vscode:
  yarn watch
  yarn dev
  open http://localhost:4000/graphql to play with graphql
 
-1:57:14
+ start (web):
+ yarn dev
+
+2:22:55
  https://www.youtube.com/watch?v=I6ypD7qv3Z8&list=PLchXT2tOAEOQuW0pNgZpk9DaUv5Y-FlkH&index=2&t=4618s

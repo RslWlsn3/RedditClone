@@ -52,7 +52,7 @@ export class userResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { orm }: any
+    @Ctx() { orm, req }: any
   ): Promise<UserResponse> {
     if (options.username.length <= 2) {
       return {
@@ -93,8 +93,10 @@ export class userResolver {
           ],
         };
       }
-      console.log("message: ", err.message);
     }
+
+    //store user id session (sets a cookie on user, keeps them logged in)
+    req.session.userId = user.id;
     return { user };
   }
 
