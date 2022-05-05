@@ -30,10 +30,17 @@ const main = async () => {
   const redisClient = createClient({ legacyMode: true });
   redisClient.connect().catch(console.error);
 
+  const cors = require("cors");
+  const corsOptions = {
+    origin: "*",
+    credentials: true, //access-control-allow-credentials:true
+    optionSuccessStatus: 200,
+  };
+
   // app.set("trust proxy", process.env.NODE_ENV !== "production"); //Cm - trying to make cookies work
 
   app.use(
-    cors({ origin: "https://studio.apollographql.com" }),
+    cors(corsOptions),
     session({
       name: "qid",
       store: new RedisStore({
