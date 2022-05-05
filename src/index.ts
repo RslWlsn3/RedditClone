@@ -14,7 +14,7 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import { createClient } from "redis";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-var cors = require("cors");
+import cors from "cors";
 
 const main = async () => {
   const orm = await MikroORM.init(microConfig); //connect to db
@@ -30,17 +30,11 @@ const main = async () => {
   const redisClient = createClient({ legacyMode: true });
   redisClient.connect().catch(console.error);
 
-  const cors = require("cors");
-  const corsOptions = {
-    origin: "*",
-    credentials: true, //access-control-allow-credentials:true
-    optionSuccessStatus: 200,
-  };
-
-  // app.set("trust proxy", process.env.NODE_ENV !== "production"); //Cm - trying to make cookies work
-
   app.use(
-    cors(corsOptions),
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    }),
     session({
       name: "qid",
       store: new RedisStore({
@@ -74,7 +68,11 @@ const main = async () => {
   });
 
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app }); //creates a graphql endpoint
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+    // cors: { origin: "http://localhost:3000", credentials: true },
+  }); //creates a graphql endpoint
 
   app.get("/", (_, res) => {
     res.send(_posts);
