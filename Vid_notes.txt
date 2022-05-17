@@ -20,6 +20,10 @@ Add table in db via migration:
 
  start (web):
  yarn dev
+ http://localhost:3000/
 
-2:45:17
+ create mutation types:
+ yarn gen
+
+3:34:05
  https://www.youtube.com/watch?v=I6ypD7qv3Z8&list=PLchXT2tOAEOQuW0pNgZpk9DaUv5Y-FlkH&index=2&t=4618s
