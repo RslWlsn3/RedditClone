@@ -25,9 +25,5 @@ Add table in db via migration:
  create mutation types:
  yarn gen
 
-3:40:48
-(still got some repeat)
+3:50:10
 https://www.youtube.com/watch?v=I6ypD7qv3Z8&list=PLchXT2tOAEOQuW0pNgZpk9DaUv5Y-FlkH&index=2&t=4618s
-
-!finish watching this for recap!
-https://youtu.be/camfkdmuR8M?t=354

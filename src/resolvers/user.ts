@@ -139,8 +139,9 @@ export class userResolver {
   @Mutation(() => Boolean)
   logout(@Ctx() { req, res }: MyContext) {
     return new Promise((resolve) =>
+      //remove session in redis
       req.session.destroy((err) => {
-        //not working:/
+        //clear cookie in response obj
         res.clearCookie(COOKIE_NAME); //working!
         if (err) {
           console.log(err);
