@@ -25,5 +25,5 @@ Add table in db via migration:
  create mutation types:
  yarn gen
 
-3:50:10
-https://www.youtube.com/watch?v=I6ypD7qv3Z8&list=PLchXT2tOAEOQuW0pNgZpk9DaUv5Y-FlkH&index=2&t=4618s
+!Error with me query! - returning null for some reason
+https://youtu.be/I6ypD7qv3Z8?t=15155
