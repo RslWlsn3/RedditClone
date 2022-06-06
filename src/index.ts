@@ -15,6 +15,8 @@ import connectRedis from "connect-redis";
 import { createClient } from "redis";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import cors from "cors";
+import { sendEmail } from "./utils/sendEmail";
+import { User } from "./entities/User";
 
 const main = async () => {
   const orm = await MikroORM.init(microConfig); //connect to db

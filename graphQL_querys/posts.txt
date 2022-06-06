@@ -1,0 +1,8 @@
+{
+  posts {
+    id
+    createdAt
+    updatedAt
+    title
+  }
+}

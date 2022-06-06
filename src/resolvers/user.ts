@@ -2,7 +2,6 @@ import {
   Resolver,
   Query,
   Mutation,
-  InputType,
   Field,
   Arg,
   Ctx,
@@ -12,14 +11,8 @@ import argon2 from "argon2";
 import { User } from "../entities/User";
 import { MyContext } from "src/types";
 import { COOKIE_NAME } from "../constants";
-
-@InputType()
-class UsernamePasswordInput {
-  @Field()
-  username: string;
-  @Field()
-  password: string;
-}
+import { validateRegister } from "../utils/validateRegister";
+import { UsernamePasswordInput } from "./UsernamePasswordInput";
 
 @ObjectType()
 class FeildError {
@@ -40,6 +33,12 @@ class UserResponse {
 
 @Resolver()
 export class userResolver {
+  // @Mutation(() => Boolean)
+  // async forgotPassword(@Arg("email") email: string, @Ctx() { orm }: any) {
+  //   // const user = await orm.em.findOne(User, {email});
+  //   return true;
+  // }
+
   @Query(() => User)
   async me(@Ctx() { orm, req }: any) {
     if (!req.session.userId) {
@@ -55,30 +54,15 @@ export class userResolver {
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { orm, req }: any
   ): Promise<UserResponse> {
-    if (options.username.length <= 2) {
-      return {
-        errors: [
-          {
-            field: "username",
-            message: "That username is too short",
-          },
-        ],
-      };
-    }
-    if (options.password.length <= 2) {
-      return {
-        errors: [
-          {
-            field: "password",
-            message: "That password is too short",
-          },
-        ],
-      };
+    const errors = validateRegister(options);
+    if (errors) {
+      return { errors };
     }
 
     const hashedPasword = await argon2.hash(options.password);
     var user = orm.em.create(User, {
       username: options.username,
+      email: options.email,
       password: hashedPasword,
     });
     try {
@@ -103,23 +87,27 @@ export class userResolver {
 
   @Mutation(() => UserResponse)
   async login(
-    @Arg("options") options: UsernamePasswordInput,
+    @Arg("usernameOrEmail") usernameOrEmail: string,
+    @Arg("password") password: string,
     @Ctx() { orm, req }: any
   ): Promise<UserResponse> {
-    const user: User = await orm.em.findOne(User, {
-      username: options.username,
-    });
+    const user: User = await orm.em.findOne(
+      User,
+      usernameOrEmail.includes("@")
+        ? { email: usernameOrEmail }
+        : { username: usernameOrEmail }
+    );
     if (!user) {
       return {
         errors: [
           {
-            field: "username",
+            field: "usernameOrEmail",
             message: "That username doesn't exist",
           },
         ],
       };
     }
-    const validPassword = await argon2.verify(user.password, options.password);
+    const validPassword = await argon2.verify(user.password, password);
     if (!validPassword) {
       return {
         errors: [
