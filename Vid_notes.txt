@@ -27,3 +27,12 @@ Add table in db via migration:
 
 !Error with me query! - it magically fixed it's self and then broke again. Slightly concerning. 
 https://youtu.be/I6ypD7qv3Z8
+
+
+*View sesion data in redis*:
+redis-cli                   //start redis-cli in wsl
+127.0.0.1:6379> KEYS *      //view all sesions
+1) "sess:lL9NFqCnk-R5fXoONBeHiPbeznGKhMbs"                      //results
+127.0.0.1:6379> GET "sess:lL9NFqCnk-R5fXoONBeHiPbeznGKhMbs"     //Retrieve information regarding particular key
+"{\"cookie\":{\"originalMaxAge\":315360000000,\"expires\":\"2032-06-04T15:07:07.171Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"userId\":11}"
+// "userId\":11 -> maps to "username": "bob" in postgres db
