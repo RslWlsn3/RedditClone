@@ -15,8 +15,8 @@ import connectRedis from "connect-redis";
 import { createClient } from "redis";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import cors from "cors";
-import { sendEmail } from "./utils/sendEmail";
 import { User } from "./entities/User";
+import Redis from "ioredis";
 
 const main = async () => {
   const orm = await MikroORM.init(microConfig); //connect to db
@@ -29,8 +29,10 @@ const main = async () => {
   const RedisStore = connectRedis(session);
 
   // redis@v4
-  const redisClient = createClient({ legacyMode: true });
-  redisClient.connect().catch(console.error);
+  // const redisClient = createClient({ legacyMode: true });
+  // redisClient.connect().catch(console.error);
+
+  const redis = new Redis();
 
   app.use(
     cors({
@@ -40,7 +42,7 @@ const main = async () => {
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
-        client: redisClient,
+        client: redis as any,
         disableTouch: true,
         disableTTL: true,
       }),
@@ -66,7 +68,7 @@ const main = async () => {
         settings: { "request.credentials": "include" },
       }),
     ],
-    context: ({ req, res }) => ({ orm: orm, req, res }), //context object is accessible to all resolvers
+    context: ({ req, res }) => ({ orm: orm, req, res, redis }), //context object is accessible to all resolvers
   });
 
   await apolloServer.start();

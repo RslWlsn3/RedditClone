@@ -10,9 +10,11 @@ import {
 import argon2 from "argon2";
 import { User } from "../entities/User";
 import { MyContext } from "src/types";
-import { COOKIE_NAME } from "../constants";
+import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import { validateRegister } from "../utils/validateRegister";
 import { UsernamePasswordInput } from "./UsernamePasswordInput";
+import { sendEmail } from "../utils/sendEmail";
+import { v4 } from "uuid";
 
 @ObjectType()
 class FeildError {
@@ -33,11 +35,37 @@ class UserResponse {
 
 @Resolver()
 export class userResolver {
-  // @Mutation(() => Boolean)
-  // async forgotPassword(@Arg("email") email: string, @Ctx() { orm }: any) {
-  //   // const user = await orm.em.findOne(User, {email});
-  //   return true;
-  // }
+  @Mutation(() => Boolean)
+  async forgotPassword(
+    @Arg("email") email: string,
+    @Ctx() { orm, redis }: any
+  ) {
+    const user = await orm.em.findOne(User, { email });
+    if (!user) {
+      // the email is not in db
+      console.log("no userrrrrr");
+      return true;
+    }
+    console.log("yes userrrrrr");
+
+    const token = v4();
+    console.log("before redis.set");
+    await redis.set(
+      FORGET_PASSWORD_PREFIX + token,
+      user.id,
+      "ex",
+      1000 * 60 * 60 * 24 * 3
+    ); //forget password is good for 3 days
+    console.log("after redis.set");
+
+    await sendEmail(
+      email,
+      `<a href="http://localhost:3000/change-password/${token}">reset password</a>`
+    );
+    console.log("after sendEmail");
+
+    return true;
+  }
 
   @Query(() => User)
   async me(@Ctx() { orm, req }: any) {
