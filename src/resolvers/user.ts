@@ -43,26 +43,22 @@ export class userResolver {
     const user = await orm.em.findOne(User, { email });
     if (!user) {
       // the email is not in db
-      console.log("no userrrrrr");
       return true;
     }
-    console.log("yes userrrrrr");
 
     const token = v4();
-    console.log("before redis.set");
+
     await redis.set(
       FORGET_PASSWORD_PREFIX + token,
       user.id,
       "ex",
       1000 * 60 * 60 * 24 * 3
     ); //forget password is good for 3 days
-    console.log("after redis.set");
 
     await sendEmail(
       email,
       `<a href="http://localhost:3000/change-password/${token}">reset password</a>`
     );
-    console.log("after sendEmail");
 
     return true;
   }
