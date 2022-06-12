@@ -36,3 +36,8 @@ open new wls -> redis-cli                                       //start redis-cl
 127.0.0.1:6379> GET "sess:lL9NFqCnk-R5fXoONBeHiPbeznGKhMbs"     //Retrieve information regarding particular key
 "{\"cookie\":{\"originalMaxAge\":315360000000,\"expires\":\"2032-06-04T15:07:07.171Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"userId\":11}"
 // "userId\":11 -> maps to "username": "bob" in postgres db
+
+Redis error fix
+(error) MISCONF Redis is configured to save RDB snapshots, but it is currently not able to persist on disk.
+open new wls -> redis-cli
+config set stop-writes-on-bgsave-error no
