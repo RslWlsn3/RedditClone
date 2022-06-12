@@ -29,7 +29,7 @@ export const validateRegister = (options: UsernamePasswordInput) => {
     return [
       {
         field: "password",
-        message: "That password is too short",
+        message: "length must be greater than 2",
       },
     ];
   }

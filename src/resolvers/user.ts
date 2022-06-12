@@ -15,9 +15,10 @@ import { validateRegister } from "../utils/validateRegister";
 import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
+import { emit } from "process";
 
 @ObjectType()
-class FeildError {
+class FieldError {
   @Field()
   field: string;
   @Field()
@@ -27,14 +28,65 @@ class FeildError {
 @ObjectType()
 class UserResponse {
   //have resolver return a reponse obj similar to this when returning an error is possible
-  @Field(() => [FeildError], { nullable: true }) //need to explicitly set the type since it is nullable
-  errors?: FeildError[];
+  @Field(() => [FieldError], { nullable: true }) //need to explicitly set the type since it is nullable
+  errors?: FieldError[];
   @Field(() => User, { nullable: true })
   user?: User;
 }
 
 @Resolver()
 export class userResolver {
+  @Mutation(() => UserResponse)
+  async changePassword(
+    @Arg("token") token: string,
+    @Arg("newPassword") newPassword: string,
+    @Ctx() { orm, redis, req }: any
+  ): Promise<UserResponse> {
+    if (newPassword.length <= 2) {
+      return {
+        errors: [
+          {
+            field: "newPassword",
+            message: "length must be greater than 2",
+          },
+        ],
+      };
+    }
+
+    const userId = await redis.get(FORGET_PASSWORD_PREFIX + token);
+    if (!userId) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "token expired",
+          },
+        ],
+      };
+    }
+
+    const user = await orm.em.findOne(User, { id: parseInt(userId) });
+
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "user no longer exists",
+          },
+        ],
+      };
+    }
+
+    user.password = await argon2.hash(newPassword);
+    await orm.em.persistAndFlush(user);
+
+    //log in user after change password
+    req.session.userId = user.id;
+
+    return { user };
+  }
+
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("email") email: string,
