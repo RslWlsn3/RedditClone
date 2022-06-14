@@ -1,8 +1,6 @@
 import "reflect-metadata";
-import { MikroORM } from "@mikro-orm/core";
 import { COOKIE_NAME, __prod__ } from "./constants";
 // import { Post } from "./entities/Post";
-import microConfig from "./mikro-orm.config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -17,12 +15,11 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-co
 import cors from "cors";
 import { User } from "./entities/User";
 import Redis from "ioredis";
+import { DataSource } from "typeorm";
+import typeOrmConfig from "./typeOrm.config";
 
 const main = async () => {
-  const orm = await MikroORM.init(microConfig); //connect to db
-  await orm.getMigrator().up(); //run migrations
-
-  let _posts = await orm.em.find(Post, {});
+  const AppDataSource = new DataSource(typeOrmConfig);
 
   const app = express();
 
@@ -68,7 +65,7 @@ const main = async () => {
         settings: { "request.credentials": "include" },
       }),
     ],
-    context: ({ req, res }) => ({ orm: orm, req, res, redis }), //context object is accessible to all resolvers
+    context: ({ req, res }) => ({ req, res, redis }), //context object is accessible to all resolvers
   });
 
   await apolloServer.start();

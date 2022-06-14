@@ -25,8 +25,7 @@ Add table in db via migration:
  create mutation types:
  yarn gen
 
-*Note: I havn't fully tested change password (token timed out) 
-https://youtu.be/I6ypD7qv3Z8?t=18595
+https://youtu.be/I6ypD7qv3Z8?t=19941
 
 
 *View sesion data in redis*: 
