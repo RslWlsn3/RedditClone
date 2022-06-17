@@ -1,9 +1,9 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";

@@ -333,12 +333,20 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
 
-"@types/express-session@*", "@types/express-session@^1.17.4":
+"@types/express-session@*":
   version "1.17.4"
   resolved "https://registry.npmjs.org/@types/express-session/-/express-session-1.17.4.tgz"
   integrity sha512-7cNlSI8+oOBUHTfPXMwDxF/Lchx5aJ3ho7+p9jJZYVg9dVDJFh3qdMXmJtRsysnvS+C6x46k9DRYmrmCkE+MVg==
   dependencies:
     "@types/express" "*"
+
+"@types/express-session@1.15.16":
+  version "1.15.16"
+  resolved "https://registry.yarnpkg.com/@types/express-session/-/express-session-1.15.16.tgz#91ba1f47a2fc2088811e8d7c17702ec92d8a8b23"
+  integrity sha512-vWQpNt9t/zc4bTX+Ow5powZb9n3NwOM0SYsAJ7PYj5vliB6FA40ye5sW5fZTw8+ekbzJf/sgvtQocf7IryJBJw==
+  dependencies:
+    "@types/express" "*"
+    "@types/node" "*"
 
 "@types/express@*", "@types/express@4.17.13", "@types/express@^4.17.13":
   version "4.17.13"
@@ -2313,14 +2321,9 @@ redis-parser@^3.0.0:
   dependencies:
     redis-errors "^1.0.0"
 
-reflect-metadata@0.1.13:
+reflect-metadata@0.1.13, reflect-metadata@^0.1.13:
   version "0.1.13"
   resolved "https://registry.npmjs.org/reflect-metadata/-/reflect-metadata-0.1.13.tgz"
-  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
-
-reflect-metadata@^0.1.13:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
   integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
 
 registry-auth-token@^4.0.0:

@@ -65,7 +65,7 @@ const main = async () => {
         settings: { "request.credentials": "include" },
       }),
     ],
-    context: ({ req, res }) => ({ req, res, redis }), //context object is accessible to all resolvers
+    context: ({ req, res }) => ({ req, res, redis, AppDataSource }), //context object is accessible to all resolvers
   });
 
   await apolloServer.start();

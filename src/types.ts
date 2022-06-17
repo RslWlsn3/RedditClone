@@ -1,12 +1,10 @@
-import { Request, Response, Express } from "express";
-import session from "express-session";
-import Redis from "ioredis";
+import { Request, Response } from "express";
+import { Redis } from "ioredis";
+import { DataSource } from "typeorm";
 
 export type MyContext = {
-  orm: any;
-  req: Request & session.Session & Partial<session.SessionData>;
+  req: Request & { session: Express.Session };
   redis: Redis;
   res: Response;
-  //   userLoader: ReturnType<typeof createUserLoader>;
-  //   updootLoader: ReturnType<typeof createUpdootLoader>;
+  AppDataSource: DataSource;
 };
