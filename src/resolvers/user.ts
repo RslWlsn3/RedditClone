@@ -145,6 +145,8 @@ export class userResolver {
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
+      //*Note* - instead of this createQueryBuilder I could've just done:
+      //User.create({*values*}).save()
       const result = await getConnection()
         .createQueryBuilder()
         .insert()

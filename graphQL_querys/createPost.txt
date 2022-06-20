@@ -1,0 +1,8 @@
+mutation {
+  createPost(title: "post from graphql") {
+    id
+    createdAt
+    updatedAt
+    title
+  }
+}
