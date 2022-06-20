@@ -25,8 +25,7 @@ Add table in db via migration:
  create mutation types:
  yarn gen
 
-https://youtu.be/I6ypD7qv3Z8?t=19941
-
+https://www.youtube.com/watch?v=I6ypD7qv3Z8&t=19941s
 
 *View sesion data in redis*: 
 open new wls -> redis-cli                                       //start redis-cli in wsl
@@ -40,3 +39,8 @@ Redis error fix
 (error) MISCONF Redis is configured to save RDB snapshots, but it is currently not able to persist on disk.
 open new wls -> redis-cli
 config set stop-writes-on-bgsave-error no
+
+db
+pgAdmin
+
+https://www.thisdot.co/blog/connecting-to-postgresql-using-typeorm

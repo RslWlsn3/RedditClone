@@ -15,15 +15,23 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-co
 import cors from "cors";
 import { User } from "./entities/User";
 import Redis from "ioredis";
-import { DataSource } from "typeorm";
-import typeOrmConfig from "./typeOrm.config";
+import { createConnection } from "typeorm";
+import { postgresPswrd } from "./config";
 
 const main = async () => {
-  const AppDataSource = new DataSource(typeOrmConfig);
+  const conn = await createConnection({
+    type: "postgres",
+    database: "lireddit2",
+    username: "postgres",
+    password: postgresPswrd,
+    logging: true,
+    synchronize: true,
+    entities: [Post, User],
+  });
 
   const app = express();
 
-  const RedisStore = connectRedis(session);
+  const RedisStore = connectRedis(session as any);
 
   // redis@v4
   // const redisClient = createClient({ legacyMode: true });
@@ -42,7 +50,7 @@ const main = async () => {
         client: redis as any,
         disableTouch: true,
         disableTTL: true,
-      }),
+      }) as any,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, //10 years
         httpOnly: true,
@@ -65,7 +73,7 @@ const main = async () => {
         settings: { "request.credentials": "include" },
       }),
     ],
-    context: ({ req, res }) => ({ req, res, redis, AppDataSource }), //context object is accessible to all resolvers
+    context: ({ req, res }) => ({ req, res, redis }), //context object is accessible to all resolvers
   });
 
   await apolloServer.start();
@@ -75,9 +83,9 @@ const main = async () => {
     // cors: { origin: "http://localhost:3000", credentials: true },
   }); //creates a graphql endpoint
 
-  app.get("/", (_, res) => {
-    res.send(_posts);
-  });
+  // app.get("/", (_, res) => {
+  //   res.send(_posts);
+  // });
   app.listen(4000, () => {
     console.log("server started on localhost:4000");
   });

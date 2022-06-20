@@ -11,8 +11,8 @@ export class PostResolver {
   }
 
   @Query(() => Post, { nullable: true })
-  post(@Arg("id", () => Int) id: number): Promise<Post | null> {
-    return Post.findOne({ where: { id } });
+  post(@Arg("id", () => Int) id: number): Promise<Post | undefined> {
+    return Post.findOne(id);
   }
 
   @Mutation(() => Post) //setting graphql type
@@ -25,7 +25,7 @@ export class PostResolver {
     @Arg("id") id: number,
     @Arg("title") title: string
   ): Promise<Post | null> {
-    const post = await Post.findOne({ where: { id } });
+    const post = await Post.findOne(id);
     if (!post) {
       return null;
     }

@@ -15,6 +15,7 @@ import { validateRegister } from "../utils/validateRegister";
 import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
+import { getConnection } from "typeorm";
 
 @ObjectType()
 class FieldError {
@@ -66,7 +67,7 @@ export class userResolver {
     }
 
     const userIdNum: number = parseInt(userId);
-    const user = await User.findOneBy({
+    const user = await User.findOne({
       id: userIdNum,
     });
 
@@ -99,9 +100,7 @@ export class userResolver {
     @Arg("email") email: string,
     @Ctx() { redis }: MyContext
   ) {
-    const user = await User.findOneBy({
-      email: email,
-    });
+    const user = await User.findOne({ where: { email } }); //use where if you want to search by a collumn that is not the pk
     if (!user) {
       // the email is not in db
       return true;
@@ -130,38 +129,35 @@ export class userResolver {
       return null;
     }
 
-    return User.findOneBy({
-      id: req.session.userId,
-    });
+    return User.findOne(req.session.userId);
   }
 
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { req, AppDataSource }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const errors = validateRegister(options);
     if (errors) {
       return { errors };
     }
 
-    const hashedPasword = await argon2.hash(options.password);
+    const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
-      const result = await AppDataSource.createQueryBuilder()
+      const result = await getConnection()
+        .createQueryBuilder()
         .insert()
         .into(User)
         .values({
           username: options.username,
           email: options.email,
-          password: hashedPasword,
+          password: hashedPassword,
         })
         .returning("*")
         .execute();
-      console.log("result: ", result);
-      user = result.raw;
+      user = result.raw[0];
     } catch (err) {
-      console.log("err: ", err);
       if (err.code === "23505") {
         return {
           errors: [
@@ -190,6 +186,7 @@ export class userResolver {
         ? { where: { email: usernameOrEmail } }
         : { where: { username: usernameOrEmail } }
     );
+
     if (!user) {
       return {
         errors: [
