@@ -1,7 +1,25 @@
 import { Post } from "../entities/Post";
-import { Resolver, Query, Ctx, Int, Arg, Mutation } from "type-graphql";
+import {
+  Resolver,
+  Query,
+  Ctx,
+  Int,
+  Arg,
+  Mutation,
+  InputType,
+  Field,
+} from "type-graphql";
 import { emit } from "process";
-import { type } from "os";
+import { type, userInfo } from "os";
+import { MyContext } from "src/types";
+
+@InputType()
+class PostInput {
+  @Field()
+  title: string;
+  @Field()
+  text: string;
+}
 
 @Resolver()
 export class PostResolver {
@@ -16,8 +34,18 @@ export class PostResolver {
   }
 
   @Mutation(() => Post) //setting graphql type
-  async createPost(@Arg("title") title: string): Promise<Post> {
-    return Post.create({ title }).save();
+  async createPost(
+    @Arg("input") input: PostInput,
+    @Ctx() { req }: MyContext
+  ): Promise<Post> {
+    console.log("333333req.session: ", req.session);
+    if (!req.session.userId) {
+      throw new Error("not authenticated");
+    }
+    return Post.create({
+      ...input,
+      creatorId: req.session.userId,
+    }).save();
   }
 
   @Mutation(() => Post, { nullable: true })

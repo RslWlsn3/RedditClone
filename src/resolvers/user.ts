@@ -211,7 +211,9 @@ export class userResolver {
       };
     }
 
+    console.log("11111req.session: ", req.session);
     req.session!.userId = user.id;
+    console.log("22222req.session: ", req.session);
 
     return { user };
   }

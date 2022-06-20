@@ -25,7 +25,7 @@ Add table in db via migration:
  create mutation types:
  yarn gen
 
-https://www.youtube.com/watch?v=I6ypD7qv3Z8&t=19941s
+https://youtu.be/I6ypD7qv3Z8?t=21548
 
 *View sesion data in redis*: 
 open new wls -> redis-cli                                       //start redis-cli in wsl

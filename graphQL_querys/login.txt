@@ -1,5 +1,5 @@
 mutation{
-  login(options: {username: "bob", password: "bob"}){
+  login(usernameOrEmail:"ben", password:"ben"){
     errors {
       field
       message

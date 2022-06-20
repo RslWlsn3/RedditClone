@@ -1,5 +1,5 @@
 mutation {
-  createPost(title: "post from graphql") {
+  createPost(input: {title: "title", text:"text"}) {
     id
     createdAt
     updatedAt
