@@ -211,9 +211,10 @@ export class userResolver {
       };
     }
 
-    console.log("11111req.session: ", req.session);
+    //saveUninitialized == false. This means that a session is create
+    //once we add data to our session (ex below)
+    //commenting out the code below prevents a cookie from being passed back to the client.
     req.session!.userId = user.id;
-    console.log("22222req.session: ", req.session);
 
     return { user };
   }

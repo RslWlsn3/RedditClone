@@ -1,8 +1,10 @@
 mutation {
-  createPost(input: {title: "title", text:"text"}) {
+  createPost(input: {title: "title2", text:"text2"}) {
     id
     createdAt
     updatedAt
     title
+    text
+    points
+    creatorId
   }
-}
