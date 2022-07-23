@@ -1,5 +1,5 @@
 {
-  posts {
+  posts(limit: 2, cursor: "1657056361557" ) {
     id
     createdAt
     updatedAt
