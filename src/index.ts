@@ -17,6 +17,7 @@ import { User } from "./entities/User";
 import Redis from "ioredis";
 import { createConnection } from "typeorm";
 import { postgresPswrd } from "./config";
+import path from "path";
 
 const main = async () => {
   const conn = await createConnection({
@@ -26,9 +27,10 @@ const main = async () => {
     password: postgresPswrd,
     logging: false,
     synchronize: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User],
   });
-
+  await conn.runMigrations();
   const app = express();
 
   const RedisStore = connectRedis(session as any);
