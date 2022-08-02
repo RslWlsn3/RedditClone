@@ -9,6 +9,8 @@ import {
   InputType,
   Field,
   UseMiddleware,
+  FieldResolver,
+  Root,
 } from "type-graphql";
 import { emit } from "process";
 import { type, userInfo } from "os";
@@ -25,8 +27,13 @@ class PostInput {
   text: string;
 }
 
-@Resolver()
+@Resolver(Post)
 export class PostResolver {
+  @FieldResolver(() => String)
+  textSnippet(@Root() root: Post) {
+    return root.text.slice(0, 50);
+  }
+
   @Query(() => [Post]) //setting graphql type
   async posts(
     @Arg("limit", () => Int) limit: number,
