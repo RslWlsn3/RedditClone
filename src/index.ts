@@ -19,6 +19,7 @@ import { createConnection } from "typeorm";
 import { postgresPswrd } from "./config";
 import path from "path";
 
+//rerunn
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",
@@ -31,6 +32,8 @@ const main = async () => {
     entities: [Post, User],
   });
   await conn.runMigrations();
+  // await Post.delete({});
+
   const app = express();
 
   const RedisStore = connectRedis(session as any);
