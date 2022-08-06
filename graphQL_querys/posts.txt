@@ -1,8 +1,16 @@
 {
-  posts(limit: 2, cursor: "1657056361557" ) {
-    id
-    createdAt
-    updatedAt
-    title
+  posts(limit: 2 ) {
+    hasMore
+    posts{
+      id
+      createdAt
+      updatedAt
+      title   
+      creator {
+        id
+        username
+        email
+      }
+    }
   }
 }

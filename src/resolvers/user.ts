@@ -6,6 +6,8 @@ import {
   Arg,
   Ctx,
   ObjectType,
+  FieldResolver,
+  Root,
 } from "type-graphql";
 import argon2 from "argon2";
 import { User } from "../entities/User";
@@ -34,8 +36,18 @@ class UserResponse {
   user?: User;
 }
 
-@Resolver()
+@Resolver(User)
 export class userResolver {
+  @FieldResolver(() => String)
+  email(@Root() user: User, @Ctx() { req }: MyContext) {
+    // current user made the request, its ok to show them their own email
+    if (req.session.userId === user.id) {
+      return user.email;
+    }
+    //current user wants to see someone elses emial
+    return "";
+  }
+
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("token") token: string,
