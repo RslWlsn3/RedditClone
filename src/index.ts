@@ -18,6 +18,7 @@ import Redis from "ioredis";
 import { createConnection } from "typeorm";
 import { postgresPswrd } from "./config";
 import path from "path";
+import { Updoot } from "./entities/Updoot";
 
 //rerunn
 const main = async () => {
@@ -29,7 +30,7 @@ const main = async () => {
     logging: false,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [Post, User],
+    entities: [Post, User, Updoot],
   });
   await conn.runMigrations();
   // await Post.delete({});

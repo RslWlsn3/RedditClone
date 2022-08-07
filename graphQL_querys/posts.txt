@@ -6,6 +6,7 @@
       createdAt
       updatedAt
       title   
+      points
       creator {
         id
         username

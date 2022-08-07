@@ -1,0 +1,3 @@
+mutation {
+  vote(value: -1, postId: 285)
+}
